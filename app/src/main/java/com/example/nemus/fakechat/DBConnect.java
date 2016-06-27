@@ -5,12 +5,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import java.util.List;
 import java.util.Vector;
 
-/**
- * Created by nemus on 2016-06-27.
- */
 public class DBConnect extends SQLiteOpenHelper{
     public DBConnect(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
