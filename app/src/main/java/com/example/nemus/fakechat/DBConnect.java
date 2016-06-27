@@ -41,7 +41,15 @@ public class DBConnect extends SQLiteOpenHelper{
             String str = cursor.getString(1);
             out.add(str);
         }
+        cursor.close();
         return out;
+    }
+
+    public boolean remove(String del){
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL("DELETE FROM CHAT WHERE word like \""+del+"\";");
+        db.close();
+        return true;
     }
 
 }

@@ -2,9 +2,13 @@ package com.example.nemus.fakechat;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.view.menu.ActionMenuItemView;
+import android.support.v7.widget.PopupMenu;
 import android.text.Editable;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -20,7 +24,6 @@ public class MainActivity extends AppCompatActivity {
     DBConnect dbConnect;
     ArrayAdapter<String> adapter;
     int last=0;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +46,33 @@ public class MainActivity extends AppCompatActivity {
                 last++;
             }
         }
+
+        //리스트 길게 클릭할때 리스너 설정
+        screen.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+                PopupMenu pop = new PopupMenu(MainActivity.this, view);
+                getMenuInflater().inflate(R.menu.menu_listview,pop.getMenu());
+
+                final int index = position;
+
+                //팝업메뉴 리스너 설정
+                pop.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        if(item.getItemId() == R.id.delete){
+                            String juda = adapter.getItem(index);
+                            adapter.remove(juda);
+                            dbConnect.remove(juda);
+                            adapter.notifyDataSetChanged();
+                        }
+                        return false;
+                    }
+                });
+                pop.show();
+                return false;
+            }
+        });
 
         //리스트 내리기 위해 설정
         screen.requestFocusFromTouch();
