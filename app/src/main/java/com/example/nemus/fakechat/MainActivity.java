@@ -28,8 +28,9 @@ public class MainActivity extends AppCompatActivity {
     public void onClick(View v) {
         if (v.getId() == R.id.button) {
             Editable memo = memoToUp.getText();
-            saveText += memo.toString() + "\n";
-            up.setText(saveText);
+            //saveText += memo.toString() + "\n";
+            //up.setText(saveText);
+            up.append(memo.toString()+"\n");
        }
     }
 
