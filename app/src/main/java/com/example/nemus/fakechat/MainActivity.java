@@ -1,5 +1,6 @@
 package com.example.nemus.fakechat;
 
+import android.content.res.Configuration;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
         Vector<String> preset = dbConnect.getAll();
 
+
         if(preset != null) {
             for (int i = 0; i < preset.size(); i++) {
                 adapter.add(preset.elementAt(i));
@@ -42,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
         up.requestFocusFromTouch();
         up.setAdapter(adapter);
     }
+
 
     public void onClick(View v) {
         if (v.getId() == R.id.button) {
