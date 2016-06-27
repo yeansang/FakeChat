@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
 import java.util.Vector;
 
 public class DBConnect extends SQLiteOpenHelper{
@@ -14,16 +15,29 @@ public class DBConnect extends SQLiteOpenHelper{
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE CHAT( id INTEGER PRIMARY KEY AUTOINCREMENT, word TEXT);");
+        db.execSQL("CREATE TABLE CHAT( id INTEGER PRIMARY KEY AUTOINCREMENT, word TEXT, pos INTEGER);");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
     }
 
-    public boolean input(String in){
+    public void dropTable(){
+
+    }
+
+    public boolean input(String in, int pos){
         SQLiteDatabase db = getWritableDatabase();
-        db.execSQL("INSERT INTO CHAT (word) VALUES (\""+in+"\");");
+        db.execSQL("INSERT INTO CHAT (word, pos) VALUES (\""+in+"\", "+pos+");");
+        db.close();
+        return true;
+    }
+
+    public boolean inputAll(ArrayList<String> in){
+        SQLiteDatabase db = getWritableDatabase();
+        for(int i=0;i<in.size();i++) {
+            db.execSQL("INSERT INTO CHAT (word, pos) VALUES (\""+in.get(i)+"\","+i+");");
+        }
         db.close();
         return true;
     }
@@ -45,9 +59,17 @@ public class DBConnect extends SQLiteOpenHelper{
         return out;
     }
 
-    public boolean remove(String del){
+    public boolean remove(int pos){
         SQLiteDatabase db = getWritableDatabase();
-        db.execSQL("DELETE FROM CHAT WHERE word like \""+del+"\";");
+        db.execSQL("DELETE FROM CHAT WHERE pos like "+pos+";");
+        db.execSQL("UPDATE CHAT SET pos ");
+        db.close();
+        return true;
+    }
+
+    public boolean removeAll(){
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL("DELETE FROM CHAT;");
         db.close();
         return true;
     }

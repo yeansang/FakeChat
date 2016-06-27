@@ -2,7 +2,6 @@ package com.example.nemus.fakechat;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.view.menu.ActionMenuItemView;
 import android.support.v7.widget.PopupMenu;
 import android.text.Editable;
 import android.view.Gravity;
@@ -14,6 +13,8 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Vector;
 
 
@@ -32,11 +33,12 @@ public class MainActivity extends AppCompatActivity {
 
         //초기화
         //database 연결
-        dbConnect = new DBConnect(getApplicationContext(), "chat.db",null,1);
+        dbConnect = new DBConnect(getApplicationContext(), "chat2.db",null,1);
         //입력창, 리스트, 리스트 어댑터 생성
         inputText = (EditText) findViewById(R.id.editText);
         screen = (ListView) findViewById(R.id.listView);
-        adapter= new ArrayAdapter<String>(this, android.R.layout.simple_expandable_list_item_1);
+        final ArrayList<String> saveWord = new ArrayList<String>();
+        adapter= new ArrayAdapter<String>(this, android.R.layout.simple_expandable_list_item_1,saveWord);
 
         //초기값 받아오기
         Vector<String> preset = dbConnect.getAll();
@@ -62,9 +64,11 @@ public class MainActivity extends AppCompatActivity {
                     public boolean onMenuItemClick(MenuItem item) {
                         if(item.getItemId() == R.id.delete){
                             String juda = adapter.getItem(index);
-                            adapter.remove(juda);
-                            dbConnect.remove(juda);
+                            saveWord.remove(index);
+                            dbConnect.removeAll();
+                            dbConnect.inputAll(saveWord);
                             adapter.notifyDataSetChanged();
+                            last--;
                         }
                         return false;
                     }
@@ -95,9 +99,9 @@ public class MainActivity extends AppCompatActivity {
                 //리스트 갱신
                 adapter.notifyDataSetChanged();
                 //db에 추가
-                dbConnect.input(memo.toString());
-                //화면 내리기
                 last++;
+                dbConnect.input(memo.toString(), last);
+                //화면 내리기
                 screen.setSelection(last);
             }else{
                 Toast toast = Toast.makeText(getApplicationContext(),"Input is NULL!!", Toast.LENGTH_LONG);
