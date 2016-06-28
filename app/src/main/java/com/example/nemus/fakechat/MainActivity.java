@@ -14,7 +14,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Vector;
 
 
@@ -45,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
         if(preset != null) {
             for (int i = 0; i < preset.size(); i++) {
                 adapter.add(preset.elementAt(i));
-                last++;
             }
         }
 
@@ -63,12 +61,10 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
                         if(item.getItemId() == R.id.delete){
-                            String juda = adapter.getItem(index);
+                            //String juda = adapter.getItem(index);
                             saveWord.remove(index);
-                            dbConnect.removeAll();
-                            dbConnect.inputAll(saveWord);
+                            dbConnect.remove(index);
                             adapter.notifyDataSetChanged();
-                            last--;
                         }
                         return false;
                     }
@@ -100,9 +96,9 @@ public class MainActivity extends AppCompatActivity {
                 adapter.notifyDataSetChanged();
                 //db에 추가
                 last++;
-                dbConnect.input(memo.toString(), last);
+                dbConnect.input(memo.toString(), adapter.getCount()-1);
                 //화면 내리기
-                screen.setSelection(last);
+                screen.setSelection(adapter.getCount()-1);
             }else{
                 Toast toast = Toast.makeText(getApplicationContext(),"Input is NULL!!", Toast.LENGTH_LONG);
                 toast.setGravity(Gravity.CENTER, 0, 0);

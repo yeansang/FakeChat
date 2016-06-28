@@ -62,7 +62,7 @@ public class DBConnect extends SQLiteOpenHelper{
     public boolean remove(int pos){
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL("DELETE FROM CHAT WHERE pos like "+pos+";");
-        db.execSQL("UPDATE CHAT SET pos ");
+        db.execSQL("UPDATE CHAT SET pos=pos-1 WHERE pos>"+pos+";");
         db.close();
         return true;
     }
